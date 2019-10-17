@@ -89,7 +89,7 @@ The simple example above shows what feature reduction is, but typically a 2D pro
 
 In order to explore this problem we will use the Gaussian distribution in high dimensional space. A spherical Gaussian in *m* dimensions can be explained by the following equation:
 
-&ensp;<img src = "images/gaussian_m_dimensions_eqn.png" />
+&ensp;&ensp;&ensp;<img src = "images/gaussian_m_dimensions_eqn.png" />
 
 We define an *m*-dimensional sphere as a set of points in *m*-dimensional space that a distance *r* from the origin.
 

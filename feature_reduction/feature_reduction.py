@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-def plot_scatters(scatter_list, scatter_names, arb_line = False, proj_x = False, proj_y = False):
+def plot_scatters(scatter_list, scatter_names, label = "2D Gaussian Scatter Plots", arb_line = False, proj_x = False, proj_y = False):
     '''
     Method to plot a multiple scatter plots from a list
         scatter_list: List of np arrays, each array should contain scatter data (x, y)
@@ -33,7 +33,9 @@ def plot_scatters(scatter_list, scatter_names, arb_line = False, proj_x = False,
        x = np.linspace(-4, 6, 10)
        ax.plot(x, 1.5*x + 2, linestyle='-', color = 'r', label="Arbitrary Threshold Line")
     
+    
     ax.legend(loc=0)
+    plt.title(label)
     plt.show()
     
     return fig, ax
@@ -56,7 +58,10 @@ def projection_example():
     
     scatter_names = ["2D-Gaussian Blue", "2D-Gaussian Orange"]
     
-    fig, ax = plot_scatters(scatter_list, scatter_names, proj_y = True)
+    fig, ax = plot_scatters(scatter_list, scatter_names)
+    fig, ax = plot_scatters(scatter_list, scatter_names, label = "2D Gaussian Scatter Plots with Arbitrary Threshold", arb_line = True)
+    fig, ax = plot_scatters(scatter_list, scatter_names, label = "2D Gaussian Scatter Plots Projected on X-axis", proj_x = True)
+    fig, ax = plot_scatters(scatter_list, scatter_names, label = "2D Gaussian Scatter Plots Projected on Y-axis", proj_y = True)
     
 def main():
     projection_example()

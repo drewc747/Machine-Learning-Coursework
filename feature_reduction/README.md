@@ -85,6 +85,31 @@ This simple example shows that feature reduction can be performed in order to si
 
 ### 2. Why is feature reduction important? The curse of dimensionality:
 
+The simple example above shows what feature reduction is, but typically a 2D problem isn't a problem we would need to perform feature reduction. However, most machine learning problems deal with high dimensions, which is hard to visualize and isn't as simple as plotting the data and picking a line to seperate the classes. In this section, we'll explore the curse of dimensionality and show why feature reduction is so important for higher dimensional problems.
+
+In order to explore this problem we will use the Gaussian distribution in high dimensional space. A spherical Gaussian in *m* dimensions can be explained by the following equation:
+
+<img src = "images/gaussian_m_dimensions_eqn.png" />
+
+We define an *m*-dimensional sphere as a set of points in *m*-dimensional space that a distance *r* from the origin.
+
+<img src = "images/sphere_m_dimensions_eqn.png" />
+
+Where *S*<sub>*m-1*</sub>*(r)* represents the surface area of the *m*-dimensional sphere. The integral of the surface area gives us the volume of the sphere, or alternatively, the surface area can be expressed as the derivative of the volume:
+
+<img src = "images/sphere_surface_area_eqn.png" />
+
+Given that the volume of an *m*-dimensional circle is represented by:
+
+<img src = "images/sphere_m_dim_volume_eqn.png" />
+
+Where *C* is some constant, and *r* is the radius of the sphere, we can then perform the derivative to get *S*<sub>*m-1*</sub>*(r)*:
+
+<img src = "images/sphere_surface_area_r_eqn.png" />
+
+If we look at a unit sphere (*r* = 1), the surface area of a unit circle simplifies to:
+
+<img src = "images/unit_sphere_surface_area_eqn.png" />
 
 ### 3. Principle Componant Analysis (PCA)
 

@@ -64,21 +64,21 @@ if __name__ == '__main__':
 
 The code is a bit overkill for this example but is meant to be scalable for more complex examples and will serve as the base code for the rest of this tutorial. For this simple example we will be working off of the "projection_example" method. Here we create two 2-D gaussian scatter plots. The data is created using the "generate_gaussian_scatter()" method which takes a mean, covariance matrix, and number of samples and uses the numpy package to create a random list of data using the Gaussian. These lists are then fed into the "plot_scatters()" definition which provides the plot below:
 
-<img src = "images/feature_reduction/gaussian_scatter.png" />
+<img src = "images/gaussian_scatter.png" />
 
 Based on this training data, we may want to create a classifier that can tell us whether a data point blue or orange based on the xy coordinates, and in the case above there is a clear correlation with xy coordinates and color. We could draw a line between to seperate the training data, and then use that line for the test data to make a prediction on whether or not a data point is blue or orange based on where the datapoint falls relative to the line. Without getting into advanced techniques, we may just naiively choose any arbitrary line that seperates the two classes like shown in the plot below.
 
-<img src = "images/feature_reduction/gaussian_scatter_arb_line.png" />
+<img src = "images/gaussian_scatter_arb_line.png" />
 
 Using this line we can now predict what color future data points are based on their x,y corridinates. If the point falls to the left of the line, we may predict it to be blue, otherwise we would predict it to be orange.
 
 Upon closer inspection, you can see that if you were to project all the data onto the x-axis, there is still seperation between the data points suggesting the the only feature that is needed to classify this data set is the x-coordinate. The plot below shows the data points projected onto the x axis and a point on the x-axis used as a threshold for classification.
 
-<img src = "images/feature_reduction/gaussian_scatter_x_proj.png" />
+<img src = "images/gaussian_scatter_x_proj.png" />
 
 Alternatively, if we try projecting the data onto the y-axis, we no longer have the ability to distinguish the red circles and blue square based on just the y value.  The plot below shows the data projected onto the y-axis.
 
-<img src = "images/feature_reduction/gaussian_scatter_y_proj.png" />
+<img src = "images/gaussian_scatter_y_proj.png" />
 
 This simple example shows that feature reduction can be performed in order to simplify a problem by removing redundant features. In this case, the y-value is redundant and unecessary for the classification of red circles and blue squares.
 

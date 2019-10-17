@@ -93,7 +93,7 @@ In order to explore this problem we will use the Gaussian distribution in high d
 
 We define an *m*-dimensional sphere as a set of points in *m*-dimensional space that a distance *r* from the origin.
 
-<img src = "images/sphere_m_dimensions_eqn.png" />
+<img src = "images/sphere_m_dimensions_eqn.png" s = 200/>
 
 Where *S*<sub>*m-1*</sub>*(r)* represents the surface area of the *m*-dimensional sphere. The integral of the surface area gives us the volume of the sphere, or alternatively, the surface area can be expressed as the derivative of the volume:
 

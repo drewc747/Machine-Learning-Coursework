@@ -89,7 +89,7 @@ The simple example above shows what feature reduction is, but typically a 2D pro
 
 In order to explore this problem we will use the Gaussian distribution in high dimensional space. A spherical Gaussian in *m* dimensions can be explained by the following equation:
 
-&ensp;&ensp;&ensp;<img src = "images/gaussian_m_dimensions_eqn.png" />
+&ensp;&ensp;&ensp;<img src = "images/gaussian_m_dimensions_eqn.png" height = "25"/>
 
 We define an *m*-dimensional sphere as a set of points in *m*-dimensional space that a distance *r* from the origin.
 
@@ -97,19 +97,19 @@ We define an *m*-dimensional sphere as a set of points in *m*-dimensional space 
 
 Where *S*<sub>*m-1*</sub>*(r)* represents the surface area of the *m*-dimensional sphere. The integral of the surface area gives us the volume of the sphere, or alternatively, the surface area can be expressed as the derivative of the volume:
 
-<img src = "images/sphere_surface_area_eqn.png" />
+<img src = "images/sphere_surface_area_eqn.png" height = "25"/>
 
 Given that the volume of an *m*-dimensional circle is represented by:
 
-<img src = "images/sphere_m_dim_volume_eqn.png" />
+<img src = "images/sphere_m_dim_volume_eqn.png" height = "25"/>
 
 Where *C* is some constant, and *r* is the radius of the sphere, we can then perform the derivative to get *S*<sub>*m-1*</sub>*(r)*:
 
-<img src = "images/sphere_surface_area_r_eqn.png" />
+<img src = "images/sphere_surface_area_r_eqn.png" height = "25"/>
 
 If we look at a unit sphere (*r* = 1), the surface area of a unit circle simplifies to:
 
-<img src = "images/unit_sphere_surface_area_eqn.png" />
+<img src = "images/unit_sphere_surface_area_eqn.png" height = "25" />
 
 ### 3. Principle Componant Analysis (PCA)
 

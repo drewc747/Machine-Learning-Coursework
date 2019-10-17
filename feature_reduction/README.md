@@ -72,9 +72,7 @@ if __name__ == '__main__':
 ```
 
 Here we create two 2-D gaussian scatter plots and then feed them into the "plot_scatters()" definition which provides the plot below:
-
 <img src = "images/gaussian_scatter.png" />
-
 Based on this training data, we may want to create a classifier that can tell us whether a data point blue or orange based on the xy coordinates, and in the case above there is a clear correlation with xy coordinates and color. We could draw a line between to seperate the training data, and then use that line for the test data to make a prediction on whether or not a data point is blue or orange based on where the datapoint falls relative to the line. Without getting into advanced techniques, we may just naiively choose any arbitrary line that seperates the two classes like shown in the plot below.
 
 <img src = "images/gaussian_scatter_arb_line.png" />

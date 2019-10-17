@@ -87,29 +87,46 @@ This simple example shows that feature reduction can be performed in order to si
 
 The simple example above shows what feature reduction is, but typically a 2D problem isn't a problem we would need to perform feature reduction. However, most machine learning problems deal with high dimensions, which is hard to visualize and isn't as simple as plotting the data and picking a line to seperate the classes. In this section, we'll explore the curse of dimensionality and show why feature reduction is so important for higher dimensional problems.
 
-In order to explore this problem we will use the Gaussian distribution in high dimensional space. A spherical Gaussian in *m* dimensions can be explained by the following equation:
+The curse of dimensionality refers to various phenomona that occurs when increasing dimensions. One such phenomona is that as dimensions increase, dimension space increases exponentially. This can be imagined in the projection example above. The data can be represented on the x-axis with a dimensional space of 15 (from -7.5 to 7.5), but when the y-axis is taken into account it is represented in the x range by 15 and the y range by 17.5 (-5 to 12.5), giving a total dimensional space of 15*17.5 = 262.5. So by removing the redundant y value, we reduce the dimensional space from 262.5 to 15. In general, as the amount of features increases, the requried dimensional space increases exponentially.
+
+Another phenomona is sparsity, since dimensional space increases exponentially, but the number of samples remains a constant, the area between samples increases exponentially as well which can make it more difficult to group data and efficiently generalize. As the features continue to increase without increasing the amount of training samples, there is a higher opporunity to overfit. In order to explore this problem in more detail, we will use the Gaussian distribution in high dimensional space. A spherical Gaussian in *m* dimensions can be explained by the following equation:
 
 &ensp;&ensp;&ensp;<img src = "images/gaussian_m_dimensions_eqn.png"/>
 
 We define an *m*-dimensional sphere as a set of points in *m*-dimensional space that a distance *r* from the origin.
 
-<img src = "images/sphere_m_dimensions_eqn.png"/>
+&ensp;&ensp;&ensp;<img src = "images/sphere_m_dimensions_eqn.png"/>
 
 Where *S*<sub>*m-1*</sub>*(r)* represents the surface area of the *m*-dimensional sphere. The integral of the surface area gives us the volume of the sphere, or alternatively, the surface area can be expressed as the derivative of the volume:
 
-<img src = "images/sphere_surface_area_eqn.png"/>
+&ensp;&ensp;&ensp;<img src = "images/sphere_surface_area_eqn.png"/>
 
 Given that the volume of an *m*-dimensional circle is represented by:
 
-<img src = "images/sphere_m_dim_volume_eqn.png"/>
+&ensp;&ensp;&ensp;<img src = "images/sphere_m_dim_volume_eqn.png"/>
 
 Where *C* is some constant, and *r* is the radius of the sphere, we can then perform the derivative to get *S*<sub>*m-1*</sub>*(r)*:
 
-<img src = "images/sphere_surface_area_r_eqn.png"/>
+&ensp;&ensp;&ensp;<img src = "images/sphere_surface_area_r_eqn.png"/>
 
 If we look at a unit sphere (*r* = 1), the surface area of a unit circle simplifies to:
 
-<img src = "images/unit_sphere_surface_area_eqn.png"/>
+&ensp;&ensp;&ensp;<img src = "images/unit_sphere_surface_area_eqn.png"/>
+
+Substituting this in for our equation of the surface area of any *m*-dimensional sphere yields:
+
+&ensp;&ensp;&ensp;<img src = "images/sphere_surface_area_r_unit_sphere_eqn.png" />
+
+We can then calculate the density of the sampled points using the above equations. For any *x* lying on the sphere with radius *r*, the probability density is the same as ||*x*||<sub>2</sub> = *r*. Therefore we can directly multiply the probability density of every point by the surface area and get:
+
+&ensp;&ensp;&ensp;<img src = "images/sphere_density_eqn.png" />
+
+We can then calculate the radius at which the density has a single maximum value, *r_hat* for large *m* by taking the gradient with respect to *r* to be zero and solve for *r_hat*.
+
+&ensp;&ensp;&ensp;<img src = "images/r_hat_sol_1.png" />
+&ensp;&ensp;&ensp;<img src = "images/r_hat_sol_2.png" />
+&ensp;&ensp;&ensp;<img src = "images/r_hat_sol_3.png" />
+
 
 ### 3. Principle Componant Analysis (PCA)
 

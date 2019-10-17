@@ -129,6 +129,60 @@ We can then calculate the radius at which the density has a single maximum value
 
 &ensp;&ensp;&ensp;<img src = "images/r_hat_sol_3.png" />
 
+For large *m*, we now consider a small value *epsilon* << *r_hat* and consider to the density ratio of *r_hat + epsilon* over *r_hat*:
+
+&ensp;&ensp;&ensp;<img src = "images/density_ratio_sol_1.png" />
+
+&ensp;&ensp;&ensp;<img src = "images/density_ratio_sol_2.png" />
+
+&ensp;&ensp;&ensp;<img src = "images/density_ratio_sol_3.png" />
+
+Using Taylor expansion for the log function, we get the following approximation:
+
+&ensp;&ensp;&ensp;<img src = "images/density_ratio_sol_4.png" />
+
+&ensp;&ensp;&ensp;<img src = "images/density_ratio_sol_5.png" />
+
+And finally we are left with the approximated density ratio for large *m*:
+
+&ensp;&ensp;&ensp;<img src = "images/density_ratio_sol_6.png" />
+
+Putting this all together we see that for a high dimensional gaussian, the greatest density of samples will reside near *r_hat* = *sqrt(m-1) * sigma*, and as you move away from that radius by some distance *epsilon*, the density will decrease exponentially as *exp*(-*epsilon*<sup>*2*</sup>/*sigma*<sup>*2*</sup>). However, in low dimensions, for example 2D and 3D, we see the majority of the samples reside near the origin within *sigma*.
+
+We can write a quick python script that samples from an m-dimensional Gaussian to show this. In the script below we produce 100 samples and compute the mean and standard deviation of the radius of the samples for each value *m* from 1 to 500.
+
+```python
+num_samples = 100
+dim = range(1, 500)
+
+r_mean = []
+r_sigma = []
+
+for d in dim:
+    # Generate m-dimensional gaussian points and calculate radius and sigma
+    normal_deviates = np.random.normal(size=(d, num_samples))
+    radius = np.sqrt((normal_deviates**2).sum(axis=0))
+    sigma = np.std(radius)
+    
+    r_mean.append(np.mean(radius))
+    r_sigma.append(sigma)
+
+fig, ax = plt.subplots(figsize=(7, 7))
+ax.plot(dim, r_mean)
+ax.set(xlabel='Dimensions', ylabel='Radius mean', title='Radius vs dimensions - 100 samples')
+plt.show
+
+fig, ax = plt.subplots(figsize=(7, 7))
+ax.plot(dim,r_sigma)
+ax.set(xlabel='Dimensions', ylabel='Sigma', title='Sigma vs. dimensions - 100 samples')
+plt.show()
+```
+
+&ensp;&ensp;&ensp;<img src = "images/curse_of_dim_radius.png" />
+
+&ensp;&ensp;&ensp;<img src = "images/curse_of_dim_sigma.png" />
+
+The plots above agree with the formulas we derived, as *m* is increased, the average radius in creases as the *sqrt(m) * sigma*. Since *sigma* doesn't increase, the majority of the points stay near the radius and the majority of the points live only on the "shell" of the *m*-dimensional sphere as opposed to the entire volume.
 
 ### 3. Principle Componant Analysis (PCA)
 

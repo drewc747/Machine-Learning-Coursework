@@ -62,9 +62,37 @@ def projection_example():
     fig, ax = plot_scatters(scatter_list, scatter_names, label = "2D Gaussian Scatter Plots with Arbitrary Threshold", arb_line = True)
     fig, ax = plot_scatters(scatter_list, scatter_names, label = "2D Gaussian Scatter Plots Projected on X-axis", proj_x = True)
     fig, ax = plot_scatters(scatter_list, scatter_names, label = "2D Gaussian Scatter Plots Projected on Y-axis", proj_y = True)
+
+def curse_of_dimensionality():
+    num_samples = 100
+    dim = range(1, 500)
+    
+    r_mean = []
+    r_sigma = []
+    
+    for d in dim:
+        # Generate m-dimensional gaussian points and calculate radius and sigma
+        normal_deviates = np.random.normal(size=(d, num_samples))
+        radius = np.sqrt((normal_deviates**2).sum(axis=0))
+        sigma = np.std(radius)
+        
+        r_mean.append(np.mean(radius))
+        r_sigma.append(sigma)
+    
+    fig, ax = plt.subplots(figsize=(7, 7))
+    ax.plot(dim, r_mean)
+    ax.set(xlabel='Dimensions', ylabel='Radius mean', title='Radius vs dimensions - 100 samples')
+    plt.show
+    
+    fig, ax = plt.subplots(figsize=(7, 7))
+    ax.plot(dim,r_sigma)
+    ax.set(xlabel='Dimensions', ylabel='Sigma', title='Sigma vs. dimensions - 100 samples')
+    plt.show()
+    
     
 def main():
-    projection_example()
+    if False: projection_example()
+    if True: curse_of_dimensionality()
 
 if __name__ == '__main__':
     main()

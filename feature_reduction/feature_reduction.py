@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-def plot_scatters(scatter_list, scatter_names, label = "2D Gaussian Scatter Plots", arb_line = False, proj_x = False, proj_y = False):
+def plot_scatters(scatter_list, scatter_names, label = "2D Gaussian Scatter Plots", arb_line = False, proj_x = False, proj_y = False, pca = False):
     '''
     Method to plot a multiple scatter plots from a list
         scatter_list: List of np arrays, each array should contain scatter data (x, y)
@@ -20,7 +20,7 @@ def plot_scatters(scatter_list, scatter_names, label = "2D Gaussian Scatter Plot
             ax.scatter(scatter_list[s][:,0], np.zeros(scatter_list[s][:,1].shape), c= colors[s], s=15.0, label= scatter_names[s] + " X Proj", marker = "+")
         if proj_y:
             ax.scatter(np.zeros(scatter_list[s][:,0].shape), scatter_list[s][:,1], c= colors[s], s=15.0, alpha = 0.15, label=scatter_names[s] + " Y Proj", marker = "+")
-    
+        
     # Create x and y axis lines    
     ax.spines['left'].set_position('zero')
     ax.spines['right'].set_color('none')
@@ -53,7 +53,7 @@ def generate_gaussian_scatter(mean, cov, num_samp):
 
 def projection_example():
     scatter_list = []
-    scatter_list.append(generate_gaussian_scatter(mean = [-5,5], cov = [[1, 0], [0, 5]], num_samp = 1000))
+    scatter_list.append(generate_gaussian_scatter(mean = [-5,5], cov = [[1, 1.5], [1.5, 5]], num_samp = 1000))
     scatter_list.append(generate_gaussian_scatter(mean = [5,3], cov = [[1, 1.5], [1.5, 5]], num_samp = 1000))
     
     scatter_names = ["2D-Gaussian Blue", "2D-Gaussian Orange"]
@@ -89,10 +89,62 @@ def curse_of_dimensionality():
     ax.set(xlabel='Dimensions', ylabel='Sigma', title='Sigma vs. dimensions - 100 samples')
     plt.show()
     
+def pca(scatter_list):
+    scatter_list_pca = np.concatenate((scatter_list[0], scatter_list[1]))
     
+    mean = np.mean(scatter_list_pca.T, axis=1)      
+    center = scatter_list_pca - mean
+    cov = np.cov(center.T)
+    eig_val, eig_vec = np.linalg.eig(cov)
+    
+    print(eig_val)
+    print(center.shape)
+    
+    PC = eig_vec.T[0]
+    
+    proj1 = np.dot(center[:1000], PC.T)
+    proj2 = np.dot(center[1000:], PC.T)
+    #proj = (eig_vec.T.dot(center.T))
+    
+    prop_cycle = plt.rcParams['axes.prop_cycle']
+    colors = prop_cycle.by_key()['color']
+    
+    fig, ax = plt.subplots(figsize=(7, 7))
+    
+    for s in range(len(scatter_list)):
+        ax.scatter(scatter_list[s][:,0], scatter_list[s][:,1], c= colors[s], s=10.0, alpha=0.3)
+    
+    ax.scatter(np.zeros(len(proj1)), proj1, c = colors[0], s=10.0, alpha=0.3)
+    ax.scatter(proj2, np.zeros(len(proj2)), c = colors[1], s=10.0, alpha=0.3)
+    
+    # Create x and y axis lines    
+    ax.spines['left'].set_position('zero')
+    ax.spines['right'].set_color('none')
+    ax.spines['bottom'].set_position('zero')
+    ax.spines['top'].set_color('none')
+    ax.spines['left'].set_smart_bounds(True)
+    ax.spines['bottom'].set_smart_bounds(True)
+    
+    plt.show()
+    
+def principle_component_analysis():
+    scatter_list_1 = generate_gaussian_scatter(mean = [-5,5], cov = [[5, 1.5], [1.5, 0.5]], num_samp = 1000)
+    scatter_list_2 = generate_gaussian_scatter(mean = [5,3], cov = [[5, 1.5], [1.5, 0.5]], num_samp = 1000)
+    
+    scatter_list_pca = np.concatenate((scatter_list_1, scatter_list_2))
+    scatter_list = [scatter_list_1, scatter_list_2]
+    
+    
+    scatter_names = ["2D-Gaussian Blue", "2D-Gaussian Orange"]
+    
+    
+    
+    pca(scatter_list)
+
 def main():
     if False: projection_example()
-    if True: curse_of_dimensionality()
+    if False: curse_of_dimensionality()
+    if True: principle_component_analysis()
 
 if __name__ == '__main__':
     main()

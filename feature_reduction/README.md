@@ -124,7 +124,9 @@ We can then calculate the density of the sampled points using the above equation
 We can then calculate the radius at which the density has a single maximum value, *r_hat* for large *m* by taking the gradient with respect to *r* to be zero and solve for *r_hat*.
 
 &ensp;&ensp;&ensp;<img src = "images/r_hat_sol_1.png" />
+
 &ensp;&ensp;&ensp;<img src = "images/r_hat_sol_2.png" />
+
 &ensp;&ensp;&ensp;<img src = "images/r_hat_sol_3.png" />
 
 

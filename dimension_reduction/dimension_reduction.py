@@ -1,5 +1,11 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import pandas as pd
+import seaborn as sns
+from sklearn.preprocessing import LabelEncoder
+from sklearn import decomposition
+pd.set_option('display.max_columns', 50)
+pd.set_option('display.width', 1000)
 
 def plot_scatters(scatter_list, scatter_names, title = "2D Gaussian Scatter Plots", arb_line = False, proj_x = False, proj_y = False, pca = False, pc = None, proj_pca = False):
     '''
@@ -173,11 +179,152 @@ def principle_component_analysis():
     scatter_names = ["2D-Gaussian Blue", "2D-Gaussian Orange"]
        
     pca_2d_to_1d(scatter_list, scatter_names, num_samples)
+
+def get_age(rings):
+    if 1 <= rings < 8.5:
+        return 0
+    elif 8.5 <= rings < 11.5:
+        return 1
+    else:
+        return 2
+
+def linear_discriminant_analysis():
+    # Load the dataset
+    #dataset = 'iris'
+    dataset = 'abalone'
+    df = pd.read_csv(f'./data/{dataset}.csv')
+    
+    if dataset == 'abalone':
+        class_col = 'Age'
+    elif dataset == 'iris':
+        class_col = 'Species'
+    
+    # Look over data
+    print(df.sample(10))
+    print(df.describe(include = 'all'))
+    
+    # Clean data
+    if dataset == 'abalone':
+        print(df[df.Height == 0]) # 0 Height is suspicious
+        df = df[df.Height != 0] # Remove 0 height
+    print(df.isna().sum()) # No NaNs
+    
+    if dataset == 'abalone':
+        # Change Sex to boolean columns
+        #new_cols = pd.get_dummies(df.Sex)
+        #df[new_cols.columns] = new_cols
+        df.drop(columns = ['Sex'], inplace = True)
+        print(df.describe(include = 'all'))
+    
+        # Change rings into 3 classes
+        df[class_col] = df['Rings'].map(get_age)
+        df.drop(columns = ['Rings'], inplace = True)
+        print(df.sample(10))
+        print(df.describe(include = 'all'))
+    
+    sns.pairplot(df, hue = class_col)
+    plt.show()
+    
+    corr = df[df.columns].corr()
+    sns.heatmap(corr, annot=True)
+    plt.show()
+    #df.hist(column = class_col, bins = 3)
+    #plt.show()
+    
+    # Calculate in class means
+    class_means = df.groupby(class_col).mean().transpose()
+    print(class_means)
+    # Calculate within class scatteer matrix
+    num_features = class_means.shape[0]
+    sm_within = np.zeros((num_features, num_features))
+    for c, rows in df.groupby(class_col):
+        rows = rows.drop([class_col], axis=1)
+        s = np.zeros((num_features, num_features))
+        for idx, row in rows.iterrows():
+            x = row.values.reshape(num_features, 1)
+            mc = class_means[c].values.reshape(num_features, 1)
+            
+            s += (x - mc).dot((x - mc).T)
+            sm_within += s
+            
+    # Calculate between class scatter matrix
+    feature_means = df.drop(columns = [class_col]).mean()
+    
+    sm_between = np.zeros((num_features, num_features))
+    for c in class_means:
+        n = len(df.loc[df[class_col] == c].index)
+        mc = class_means[c].values.reshape(num_features,1)
+        m = feature_means.values.reshape(num_features,1)
+        
+        sm_between += n * (mc - m).dot((mc - m).T)
+    
+    # Calculate eigen_values and vectors
+    eig_val, eig_vec = np.linalg.eig(np.linalg.inv(sm_within).dot(sm_between))
+    
+    pairs = [(np.abs(eig_val[i]), eig_vec[:,i]) for i in range (len(eig_val))]
+    pairs = sorted(pairs, key=lambda x: x[0], reverse=True)
+    
+    for pair in pairs:
+        print(pair[0])
+    
+    # Matrix with first two eigenvectors
+    w_matrix = np.hstack((pairs[0][1].reshape(num_features,1), pairs[1][1].reshape(num_features,1))).real
+    
+    x_lda = np.array(df.drop([class_col], axis=1).dot(w_matrix))
+    le = LabelEncoder()
+    y = le.fit_transform(df[class_col])
+    
+    # Create colormap
+    colors = plt.get_cmap("tab10")
+    colors = truncate_colormap(colors, 0.0, 0.2)
+    
+    # Plot results
+    fig, ax = plt.subplots(figsize=(7, 7))
+    ax.scatter(x_lda[:,0], x_lda[:,1], c=y, cmap= plt.get_cmap("tab10")[0:2], alpha =0.7)
+    
+    # Create x and y axis lines    
+    ax.spines['left'].set_position('zero')
+    ax.spines['right'].set_color('none')
+    ax.spines['bottom'].set_position('zero')
+    ax.spines['top'].set_color('none')
+    ax.spines['left'].set_smart_bounds(True)
+    ax.spines['bottom'].set_smart_bounds(True)
+    
+    plt.xlabel('LD1')
+    plt.ylabel('LD2')
+    
+    plt.show()
+    
+    # PCA for comparison
+    X = np.array(df.drop([class_col], axis=1))
+    print(X)
+    Y = np.array(df[class_col])
+    
+    pca = decomposition.PCA(n_components = 2)
+    pca.fit(X)
+    X = pca.transform(X)
+    
+    fig, ax = plt.subplots(figsize=(7, 7))
+    ax.scatter(X[:, 0], X[:, 1], c = Y, cmap = 'tab10', alpha =0.7, label = Y)
+    
+    # Create x and y axis lines    
+    ax.spines['left'].set_position('zero')
+    ax.spines['right'].set_color('none')
+    ax.spines['bottom'].set_position('zero')
+    ax.spines['top'].set_color('none')
+    ax.spines['left'].set_smart_bounds(True)
+    ax.spines['bottom'].set_smart_bounds(True)
+    
+    ax.legend(loc=0)
+    plt.title(f'PCA on {dataset} dataset')
+    plt.show()
+    
     
 def main():
     if False: projection_example()
     if False: curse_of_dimensionality()
-    if True: principle_component_analysis()
+    if False: principle_component_analysis()
+    if True: linear_discriminant_analysis()
 
 if __name__ == '__main__':
     main()

@@ -1,4 +1,4 @@
-## Feature Reduction
+## Dimension Reduction
 
 **Techniques Explored:** Principle Componant Analysis (PCA), Linear Discriminant Analysis (LDA), Multi-Dimensional Scaling (MDS), Locality Sensitive Hashing (LSH)
 
